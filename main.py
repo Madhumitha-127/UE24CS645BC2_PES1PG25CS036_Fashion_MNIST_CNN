@@ -6,7 +6,7 @@ from layers.activations import ReLU
 from layers.pooling import MaxPool
 from layers.flatten import Flatten
 from layers.fully_connected import FullyConnected
-
+from tabulate import tabulate
 from utils.loss import *
 
 import numpy as np
@@ -58,6 +58,7 @@ epochs = 5
 
 loss_history = []
 accuracy_history = []
+training_results = []
 
 # Training loop
 for epoch in range(epochs):
@@ -111,6 +112,12 @@ for epoch in range(epochs):
     epoch_loss = total_loss / 1000
     epoch_accuracy = correct / 1000
 
+    training_results.append([
+    epoch + 1,
+    round(epoch_loss, 4),
+    round(epoch_accuracy * 100, 2)
+])
+    
     loss_history.append(epoch_loss)
     accuracy_history.append(epoch_accuracy)
 
@@ -119,7 +126,19 @@ print(
     f"Loss: {epoch_loss:.4f} | "
     f"Accuracy: {epoch_accuracy:.4f}"
 )
+print("\nTraining Summary:\n")
 
+print(
+    tabulate(
+        training_results,
+        headers=[
+            "Epoch",
+            "Loss",
+            "Accuracy (%)"
+        ],
+        tablefmt="grid"
+    )
+)
 
 # Testing
 correct = 0
